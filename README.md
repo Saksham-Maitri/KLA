@@ -26,16 +26,21 @@ The latency measurement was taken on the experiment GPU and excludes file I/O.
 ## Repository Layout
 
 ```text
-.
+team_name/
 ├── README.md
-├── evaluate.py
-├── train.py
+├── run.py
 ├── requirements.txt
 ├── models/
 │   └── best_model.pt
+├── train.py
 └── restored_test_outputs/
     └── 000000.npy ...
 ```
+
+The first four entries satisfy the final execution contract. `train.py` and
+`restored_test_outputs/` are additional GitHub reproducibility artifacts.
+Before creating a separately uploaded folder, rename its top-level directory
+to your actual team name.
 
 ## 1. Environment Setup
 
@@ -43,8 +48,8 @@ Python 3.11 or newer is recommended. A CUDA-capable GPU is recommended for
 training and fast inference; CPU inference is also supported.
 
 ```bash
-git clone [REPLACE_WITH_PUBLIC_REPOSITORY_URL]
-cd [REPLACE_WITH_REPOSITORY_DIRECTORY]
+git clone https://github.com/Saksham-Maitri/KLA-hackathon-submission.git
+cd KLA-hackathon-submission
 
 python3 -m venv .venv
 source .venv/bin/activate
@@ -63,19 +68,26 @@ CPU. To reproduce the reported latency, use an NVIDIA GPU and `--device cuda`.
 
 ## 2. Run Inference
 
-The evaluation script accepts the two required positional arguments:
+The required `run.py` script accepts the two positional arguments specified by
+the organizers:
 
 1. directory containing degraded `.npy` inputs;
 2. directory in which restored `.npy` outputs will be written.
 
 ```bash
-python evaluate.py /path/to/NoisyLR /path/to/restored_outputs
+python run.py <input-dir> <output-dir>
+```
+
+For example:
+
+```bash
+python run.py /path/to/NoisyLR /path/to/restored_outputs
 ```
 
 Explicit CUDA example:
 
 ```bash
-python evaluate.py /path/to/NoisyLR /path/to/restored_outputs \
+python run.py /path/to/NoisyLR /path/to/restored_outputs \
   --checkpoint models/best_model.pt \
   --device cuda \
   --batch-size 16
@@ -84,7 +96,7 @@ python evaluate.py /path/to/NoisyLR /path/to/restored_outputs \
 CPU example:
 
 ```bash
-python evaluate.py /path/to/NoisyLR /path/to/restored_outputs \
+python run.py /path/to/NoisyLR /path/to/restored_outputs \
   --device cpu \
   --batch-size 4
 ```
@@ -110,7 +122,7 @@ No source edits or per-image configuration are required. For every input named
 Show all inference options:
 
 ```bash
-python evaluate.py --help
+python run.py --help
 ```
 
 ## 3. Reproduce Training
@@ -178,7 +190,7 @@ signal. Only the final saved restoration is clipped to `[0, 1]`.
 
 - `models/best_model.pt`: final `lr_4e4` checkpoint.
 - `restored_test_outputs/`: restored results for all 400 provided test arrays.
-- `evaluate.py`: standalone evaluation entry point.
+- `run.py`: standalone evaluation entry point required by the organizers.
 - `train.py`: complete training and validation implementation.
 - `requirements.txt`: pinned clean reproducibility environment.
 
@@ -195,7 +207,7 @@ confirm `torch.cuda.is_available()` returns `True`. Alternatively, run with
 Reduce `--batch-size`, for example:
 
 ```bash
-python evaluate.py /path/to/NoisyLR /path/to/outputs --batch-size 4
+python run.py /path/to/NoisyLR /path/to/outputs --batch-size 4
 ```
 
 ### Unexpected input shape
@@ -209,5 +221,3 @@ them.
 The trained weights and code are supplied for hackathon evaluation. The
 competition dataset is not redistributed in this repository; obtain it through
 the official hackathon channel and follow its usage terms.
-
-# KLA-hackathon-submission

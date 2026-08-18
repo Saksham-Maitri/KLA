@@ -26,7 +26,7 @@ import torch.nn.functional as F
 from torch import Tensor, nn
 from torch.utils.data import DataLoader, Dataset
 
-from evaluate import ModelConfig, RestorationUNet
+from run import ModelConfig, RestorationUNet
 
 
 SPLIT_SEED = 2026

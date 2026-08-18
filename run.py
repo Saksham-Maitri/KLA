@@ -1,7 +1,7 @@
-"""Restore every NumPy image in a directory with the submitted residual U-Net.
+"""KLA submission entry point for restoring every NumPy image in a directory.
 
 Example:
-    python evaluate.py /path/to/NoisyLR /path/to/restored_outputs
+    python run.py /path/to/input_dir /path/to/output_dir
 """
 
 from __future__ import annotations
